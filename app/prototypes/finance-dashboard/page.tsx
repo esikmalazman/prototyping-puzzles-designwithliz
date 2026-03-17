@@ -71,18 +71,37 @@ export default function FinanceDashboard() {
     }]
   };
 
+  const netSavings = totalIncome - totalExpenses;
+  const savingsRate = Math.round((netSavings / totalIncome) * 100);
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1 className={styles.title}>Personal finance dashboard</h1>
+        <h1 className={styles.title}>Personal finance</h1>
+        <p className={styles.subtitle}>March 2025 · Overview</p>
       </header>
 
       <div className={styles.dashboard}>
         <div className={styles.card}>
           <h2 className={styles.cardTitle}>Monthly overview</h2>
-          <div>
-            <p>Total income: <span className={styles.totalIncome}>${totalIncome}</span></p>
-            <p>Total expenses: <span className={styles.totalExpenses}>${totalExpenses}</span></p>
+          <div className={styles.statsRow}>
+            <div className={styles.statItem}>
+              <span className={styles.statLabel}>Total income</span>
+              <span className={styles.totalIncome}>${totalIncome.toLocaleString()}</span>
+              <span className={`${styles.badge} ${styles.badgeGreen}`}>↑ Income</span>
+            </div>
+            <div className={styles.divider} />
+            <div className={styles.statItem}>
+              <span className={styles.statLabel}>Total expenses</span>
+              <span className={styles.totalExpenses}>${totalExpenses.toLocaleString()}</span>
+              <span className={`${styles.badge} ${styles.badgeRed}`}>↓ Spending</span>
+            </div>
+            <div className={styles.divider} />
+            <div className={styles.statItem}>
+              <span className={styles.statLabel}>Net saved</span>
+              <span className={styles.totalIncome}>${netSavings.toLocaleString()}</span>
+              <span className={`${styles.badge} ${styles.badgeGreen}`}>{savingsRate}% savings rate</span>
+            </div>
           </div>
         </div>
 
@@ -96,7 +115,26 @@ export default function FinanceDashboard() {
                 maintainAspectRatio: false,
                 plugins: {
                   legend: { display: false },
-                }
+                  tooltip: {
+                    backgroundColor: '#0f172a',
+                    titleColor: '#94a3b8',
+                    bodyColor: '#ffffff',
+                    padding: 10,
+                    cornerRadius: 8,
+                  },
+                },
+                scales: {
+                  x: {
+                    grid: { display: false },
+                    border: { display: false },
+                    ticks: { color: '#94a3b8', font: { size: 11 } },
+                  },
+                  y: {
+                    grid: { color: '#f1f5f9' },
+                    border: { display: false, dash: [4, 4] },
+                    ticks: { color: '#94a3b8', font: { size: 11 } },
+                  },
+                },
               }}
             />
           </div>
@@ -110,6 +148,26 @@ export default function FinanceDashboard() {
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
+                cutout: '72%',
+                plugins: {
+                  legend: {
+                    position: 'bottom',
+                    labels: {
+                      color: '#64748b',
+                      font: { size: 12 },
+                      padding: 16,
+                      boxWidth: 10,
+                      boxHeight: 10,
+                    },
+                  },
+                  tooltip: {
+                    backgroundColor: '#0f172a',
+                    titleColor: '#94a3b8',
+                    bodyColor: '#ffffff',
+                    padding: 10,
+                    cornerRadius: 8,
+                  },
+                },
               }}
             />
           </div>
@@ -119,13 +177,44 @@ export default function FinanceDashboard() {
           <h2 className={styles.cardTitle}>Savings trend</h2>
           <div className={styles.chartContainer}>
             <Line 
-              data={savingsChartData}
+              data={{
+                ...savingsChartData,
+                datasets: [{
+                  ...savingsChartData.datasets[0],
+                  borderColor: '#6366f1',
+                  backgroundColor: 'rgba(99, 102, 241, 0.06)',
+                  pointBackgroundColor: '#6366f1',
+                  pointRadius: 4,
+                  pointHoverRadius: 6,
+                  borderWidth: 2,
+                  fill: true,
+                }]
+              }}
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
                   legend: { display: false },
-                }
+                  tooltip: {
+                    backgroundColor: '#0f172a',
+                    titleColor: '#94a3b8',
+                    bodyColor: '#ffffff',
+                    padding: 10,
+                    cornerRadius: 8,
+                  },
+                },
+                scales: {
+                  x: {
+                    grid: { display: false },
+                    border: { display: false },
+                    ticks: { color: '#94a3b8', font: { size: 11 } },
+                  },
+                  y: {
+                    grid: { color: '#f1f5f9' },
+                    border: { display: false, dash: [4, 4] },
+                    ticks: { color: '#94a3b8', font: { size: 11 } },
+                  },
+                },
               }}
             />
           </div>
