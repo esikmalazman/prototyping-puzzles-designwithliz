@@ -21,7 +21,7 @@ import {
 } from 'chart.js';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import styles from './styles.module.css';
-import { monthlyExpenses, incomeData, savingsHistory, categoryColors } from './data';
+import { monthlyExpenses, incomeData, savingsHistory } from './data';
 
 ChartJS.register(
   CategoryScale,
@@ -35,39 +35,49 @@ ChartJS.register(
   LineElement
 );
 
+const PALETTE = {
+  indigo:  '#6366f1',
+  violet:  '#8b5cf6',
+  cyan:    '#06b6d4',
+  teal:    '#14b8a6',
+  amber:   '#f59e0b',
+  rose:    '#f43f5e',
+  emerald: '#10b981',
+};
+
 export default function FinanceDashboard() {
-  // Calculate total income and expenses
   const totalIncome = Object.values(incomeData).reduce((acc, curr) => acc + curr, 0);
   const totalExpenses = Object.values(monthlyExpenses.march).reduce((acc, curr) => acc + curr, 0);
 
-  // Prepare data for monthly expenses chart
   const expenseChartData = {
     labels: Object.keys(monthlyExpenses.march),
     datasets: [{
       label: 'March expenses',
       data: Object.values(monthlyExpenses.march),
-      backgroundColor: Object.values(categoryColors),
+      backgroundColor: Object.values(PALETTE),
+      borderRadius: 6,
+      borderSkipped: false,
     }]
   };
 
-  // Prepare data for income breakdown
   const incomeChartData = {
     labels: Object.keys(incomeData),
     datasets: [{
       data: Object.values(incomeData),
-      backgroundColor: ['#2ecc71', '#3498db', '#9b59b6'],
+      backgroundColor: [PALETTE.indigo, PALETTE.violet, PALETTE.cyan],
     }]
   };
 
-  // Prepare data for savings trend
   const savingsChartData = {
     labels: savingsHistory.map(item => item.month),
     datasets: [{
       label: 'Monthly savings',
       data: savingsHistory.map(item => item.amount),
-      borderColor: '#2ecc71',
+      borderColor: PALETTE.emerald,
+      backgroundColor: 'rgba(16, 185, 129, 0.06)',
+      pointBackgroundColor: PALETTE.emerald,
       tension: 0.4,
-      fill: false,
+      fill: true,
     }]
   };
 
@@ -130,7 +140,7 @@ export default function FinanceDashboard() {
                     ticks: { color: '#94a3b8', font: { size: 11 } },
                   },
                   y: {
-                    grid: { color: '#f1f5f9' },
+                    grid: { color: '#e8eaf0' },
                     border: { display: false, dash: [4, 4] },
                     ticks: { color: '#94a3b8', font: { size: 11 } },
                   },
@@ -153,7 +163,7 @@ export default function FinanceDashboard() {
                   legend: {
                     position: 'bottom',
                     labels: {
-                      color: '#64748b',
+                      color: '#94a3b8',
                       font: { size: 12 },
                       padding: 16,
                       boxWidth: 10,
@@ -181,13 +191,9 @@ export default function FinanceDashboard() {
                 ...savingsChartData,
                 datasets: [{
                   ...savingsChartData.datasets[0],
-                  borderColor: '#6366f1',
-                  backgroundColor: 'rgba(99, 102, 241, 0.06)',
-                  pointBackgroundColor: '#6366f1',
                   pointRadius: 4,
                   pointHoverRadius: 6,
                   borderWidth: 2,
-                  fill: true,
                 }]
               }}
               options={{
@@ -210,7 +216,7 @@ export default function FinanceDashboard() {
                     ticks: { color: '#94a3b8', font: { size: 11 } },
                   },
                   y: {
-                    grid: { color: '#f1f5f9' },
+                    grid: { color: '#e8eaf0' },
                     border: { display: false, dash: [4, 4] },
                     ticks: { color: '#94a3b8', font: { size: 11 } },
                   },

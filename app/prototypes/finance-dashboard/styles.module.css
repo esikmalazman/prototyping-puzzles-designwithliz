@@ -66,7 +66,7 @@
 
 .statLabel {
   font-size: 0.8125rem;
-  color: #64748b;
+  color: #94a3b8;
   font-weight: 400;
 }
 
@@ -99,18 +99,18 @@
 }
 
 .badgeGreen {
-  background-color: #f0fdf4;
-  color: #16a34a;
+  background-color: rgba(16, 185, 129, 0.09);
+  color: #059669;
 }
 
 .badgeRed {
-  background-color: #fff1f2;
+  background-color: rgba(225, 29, 72, 0.07);
   color: #e11d48;
 }
 
 .divider {
   height: 1px;
-  background-color: #f1f5f9;
+  background-color: #e8eaf0;
   margin: 0.25rem 0;
 }
 
