@@ -1,10 +1,14 @@
+.page {
+  background-color: #f5f5f7;
+  min-height: 100vh;
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+}
+
 .container {
   padding: 3rem 3.5rem;
   max-width: 1280px;
   margin: 0 auto;
-  background-color: #f5f5f7;
-  min-height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
 }
 
 /* ── Header ─────────────────────────────────────────── */
@@ -132,8 +136,126 @@
   position: relative;
 }
 
-.chartContainerTall {
+.chartContainerSparkline {
   width: 100%;
-  height: 180px;
+  height: 160px;
   position: relative;
+}
+
+/* ── Sparkline header ───────────────────────────────── */
+
+.sparklineHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.sparklineHeader .cardTitle {
+  margin-bottom: 0;
+}
+
+.sparklineRange {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.sparklineRangeItem {
+  font-size: 0.6875rem;
+  color: #94a3b8;
+}
+
+.sparklineRangeItem strong {
+  font-weight: 600;
+  color: #64748b;
+}
+
+.sparklineRangeCurrent {
+  font-size: 0.6875rem;
+  color: #94a3b8;
+}
+
+.sparklineRangeCurrent strong {
+  font-weight: 600;
+  color: #10b981;
+}
+
+/* ── Responsive ─────────────────────────────────────── */
+
+/* Tablet: collapse charts side-by-side → stacked */
+@media (max-width: 900px) {
+  .container {
+    padding: 2rem;
+  }
+
+  .chartsRow {
+    grid-template-columns: 1fr;
+  }
+
+  .metricValue {
+    font-size: 2rem;
+  }
+
+  .metricCard,
+  .card {
+    padding: 1.5rem;
+  }
+}
+
+/* Mobile: single column, tighter spacing */
+@media (max-width: 640px) {
+  .container {
+    padding: 1.25rem 1rem;
+  }
+
+  .header {
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .title {
+    font-size: 1.375rem;
+  }
+
+  .dashboard {
+    gap: 0.75rem;
+  }
+
+  .metricsRow {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .metricCard,
+  .card {
+    padding: 1.25rem;
+    border-radius: 14px;
+  }
+
+  .metricValue {
+    font-size: 1.875rem;
+  }
+
+  .chartContainer {
+    height: 200px;
+  }
+
+  .chartContainerSparkline {
+    height: 130px;
+  }
+
+  .sparklineHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.625rem;
+    margin-bottom: 1rem;
+  }
+
+  .sparklineHeader .cardTitle {
+    margin-bottom: 0;
+  }
+
+  .sparklineRange {
+    gap: 1rem;
+  }
 }

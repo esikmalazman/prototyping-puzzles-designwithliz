@@ -55,8 +55,10 @@ export default function FinanceDashboard() {
       label: 'March expenses',
       data: Object.values(monthlyExpenses.march),
       backgroundColor: Object.values(PALETTE),
-      borderRadius: 6,
+      borderRadius: 4,
       borderSkipped: false,
+      barPercentage: 0.5,
+      categoryPercentage: 0.75,
     }]
   };
 
@@ -68,16 +70,28 @@ export default function FinanceDashboard() {
     }]
   };
 
+  const savingsAmounts = savingsHistory.map(item => item.amount);
+  const savingsMin = Math.min(...savingsAmounts);
+  const savingsMax = Math.max(...savingsAmounts);
+  const savingsLatest = savingsAmounts[savingsAmounts.length - 1];
+
+  // Endpoint-only point radii — Tufte sparkline style
+  const sparklinePointRadii = savingsAmounts.map((_, i) =>
+    i === 0 || i === savingsAmounts.length - 1 ? 3.5 : 0
+  );
+
   const savingsChartData = {
     labels: savingsHistory.map(item => item.month),
     datasets: [{
       label: 'Monthly savings',
-      data: savingsHistory.map(item => item.amount),
+      data: savingsAmounts,
       borderColor: PALETTE.emerald,
-      backgroundColor: 'rgba(16, 185, 129, 0.06)',
       pointBackgroundColor: PALETTE.emerald,
-      tension: 0.4,
-      fill: true,
+      pointRadius: sparklinePointRadii,
+      pointHoverRadius: sparklinePointRadii.map(r => r > 0 ? 5 : 0),
+      tension: 0.35,
+      fill: false,
+      borderWidth: 1.5,
     }]
   };
 
@@ -92,20 +106,29 @@ export default function FinanceDashboard() {
     cornerRadius: 8,
   };
 
-  const scaleDefaults = {
+  // Tufte range-frame spirit: hairline gridlines, no axis border,
+  // minimal ticks (≤4), dollar labels — axes inform without dominating
+  const rangeFrameScales = {
     x: {
       grid: { display: false },
       border: { display: false },
-      ticks: { color: '#94a3b8', font: { size: 11 } },
+      ticks: { color: '#94a3b8', font: { size: 10 }, maxRotation: 0 },
     },
     y: {
-      grid: { color: '#e8eaf0' },
-      border: { display: false, dash: [4, 4] },
-      ticks: { color: '#94a3b8', font: { size: 11 } },
+      grid: { color: 'rgba(0, 0, 0, 0.05)', lineWidth: 1 },
+      border: { display: false },
+      ticks: {
+        color: '#94a3b8',
+        font: { size: 10 },
+        maxTicksLimit: 4,
+        padding: 8,
+        callback: (value: number | string) => `$${Number(value).toLocaleString()}`,
+      },
     },
   };
 
   return (
+    <div className={styles.page}>
     <div className={styles.container}>
       <header className={styles.header}>
         <h1 className={styles.title}>Personal finance</h1>
@@ -144,7 +167,7 @@ export default function FinanceDashboard() {
                   responsive: true,
                   maintainAspectRatio: false,
                   plugins: { legend: { display: false }, tooltip: tooltipDefaults },
-                  scales: scaleDefaults,
+                  scales: rangeFrameScales,
                 }}
               />
             </div>
@@ -154,15 +177,18 @@ export default function FinanceDashboard() {
             <h2 className={styles.cardTitle}>Income sources</h2>
             <div className={styles.chartContainer}>
               <Doughnut
-                data={incomeChartData}
+                data={{
+                  ...incomeChartData,
+                  datasets: [{ ...incomeChartData.datasets[0], borderWidth: 0 }],
+                }}
                 options={{
                   responsive: true,
                   maintainAspectRatio: false,
-                  cutout: '72%',
+                  cutout: '82%',
                   plugins: {
                     legend: {
                       position: 'bottom',
-                      labels: { color: '#94a3b8', font: { size: 12 }, padding: 16, boxWidth: 10, boxHeight: 10 },
+                      labels: { color: '#94a3b8', font: { size: 11 }, padding: 16, boxWidth: 8, boxHeight: 8 },
                     },
                     tooltip: tooltipDefaults,
                   },
@@ -172,26 +198,32 @@ export default function FinanceDashboard() {
           </div>
         </div>
 
-        {/* Zone 3 — Trend (full width) */}
+        {/* Zone 3 — Sparkline (full width) */}
         <div className={styles.card}>
-          <h2 className={styles.cardTitle}>Savings trend</h2>
-          <div className={styles.chartContainerTall}>
+          <div className={styles.sparklineHeader}>
+            <h2 className={styles.cardTitle}>Savings trend</h2>
+            <div className={styles.sparklineRange}>
+              <span className={styles.sparklineRangeItem}>Low <strong>${savingsMin.toLocaleString()}</strong></span>
+              <span className={styles.sparklineRangeItem}>High <strong>${savingsMax.toLocaleString()}</strong></span>
+              <span className={styles.sparklineRangeCurrent}>Latest <strong>${savingsLatest.toLocaleString()}</strong></span>
+            </div>
+          </div>
+          <div className={styles.chartContainerSparkline}>
             <Line
-              data={{
-                ...savingsChartData,
-                datasets: [{ ...savingsChartData.datasets[0], pointRadius: 4, pointHoverRadius: 6, borderWidth: 2 }],
-              }}
+              data={savingsChartData}
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false }, tooltip: tooltipDefaults },
-                scales: scaleDefaults,
+                scales: rangeFrameScales,
+                layout: { padding: { top: 4, bottom: 4 } },
               }}
             />
           </div>
         </div>
 
       </div>
+    </div>
     </div>
   );
 } 
