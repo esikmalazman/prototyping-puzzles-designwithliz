@@ -84,147 +84,113 @@ export default function FinanceDashboard() {
   const netSavings = totalIncome - totalExpenses;
   const savingsRate = Math.round((netSavings / totalIncome) * 100);
 
+  const tooltipDefaults = {
+    backgroundColor: '#0f172a',
+    titleColor: '#94a3b8',
+    bodyColor: '#ffffff',
+    padding: 10,
+    cornerRadius: 8,
+  };
+
+  const scaleDefaults = {
+    x: {
+      grid: { display: false },
+      border: { display: false },
+      ticks: { color: '#94a3b8', font: { size: 11 } },
+    },
+    y: {
+      grid: { color: '#e8eaf0' },
+      border: { display: false, dash: [4, 4] },
+      ticks: { color: '#94a3b8', font: { size: 11 } },
+    },
+  };
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
         <h1 className={styles.title}>Personal finance</h1>
-        <p className={styles.subtitle}>March 2025 · Overview</p>
+        <span className={styles.periodPill}>March 2025</span>
       </header>
 
       <div className={styles.dashboard}>
-        <div className={styles.card}>
-          <h2 className={styles.cardTitle}>Monthly overview</h2>
-          <div className={styles.statsRow}>
-            <div className={styles.statItem}>
-              <span className={styles.statLabel}>Total income</span>
-              <span className={styles.totalIncome}>${totalIncome.toLocaleString()}</span>
-              <span className={`${styles.badge} ${styles.badgeGreen}`}>↑ Income</span>
-            </div>
-            <div className={styles.divider} />
-            <div className={styles.statItem}>
-              <span className={styles.statLabel}>Total expenses</span>
-              <span className={styles.totalExpenses}>${totalExpenses.toLocaleString()}</span>
-              <span className={`${styles.badge} ${styles.badgeRed}`}>↓ Spending</span>
-            </div>
-            <div className={styles.divider} />
-            <div className={styles.statItem}>
-              <span className={styles.statLabel}>Net saved</span>
-              <span className={styles.totalIncome}>${netSavings.toLocaleString()}</span>
-              <span className={`${styles.badge} ${styles.badgeGreen}`}>{savingsRate}% savings rate</span>
-            </div>
+
+        {/* Zone 1 — Key metrics */}
+        <div className={styles.metricsRow}>
+          <div className={styles.metricCard}>
+            <span className={styles.metricLabel}>Total income</span>
+            <span className={styles.metricValue}>${totalIncome.toLocaleString()}</span>
+            <span className={`${styles.badge} ${styles.badgeGreen}`}>↑ This month</span>
+          </div>
+          <div className={styles.metricCard}>
+            <span className={styles.metricLabel}>Total expenses</span>
+            <span className={styles.metricValue}>${totalExpenses.toLocaleString()}</span>
+            <span className={`${styles.badge} ${styles.badgeRed}`}>↓ Spending</span>
+          </div>
+          <div className={styles.metricCard}>
+            <span className={styles.metricLabel}>Net saved</span>
+            <span className={styles.metricValue}>${netSavings.toLocaleString()}</span>
+            <span className={`${styles.badge} ${styles.badgeGreen}`}>{savingsRate}% savings rate</span>
           </div>
         </div>
 
-        <div className={styles.card}>
-          <h2 className={styles.cardTitle}>Expense breakdown</h2>
-          <div className={styles.chartContainer}>
-            <Bar 
-              data={expenseChartData}
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: { display: false },
-                  tooltip: {
-                    backgroundColor: '#0f172a',
-                    titleColor: '#94a3b8',
-                    bodyColor: '#ffffff',
-                    padding: 10,
-                    cornerRadius: 8,
-                  },
-                },
-                scales: {
-                  x: {
-                    grid: { display: false },
-                    border: { display: false },
-                    ticks: { color: '#94a3b8', font: { size: 11 } },
-                  },
-                  y: {
-                    grid: { color: '#e8eaf0' },
-                    border: { display: false, dash: [4, 4] },
-                    ticks: { color: '#94a3b8', font: { size: 11 } },
-                  },
-                },
-              }}
-            />
+        {/* Zone 2 — Breakdown charts */}
+        <div className={styles.chartsRow}>
+          <div className={styles.card}>
+            <h2 className={styles.cardTitle}>Expense breakdown</h2>
+            <div className={styles.chartContainer}>
+              <Bar
+                data={expenseChartData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: { legend: { display: false }, tooltip: tooltipDefaults },
+                  scales: scaleDefaults,
+                }}
+              />
+            </div>
           </div>
-        </div>
 
-        <div className={styles.card}>
-          <h2 className={styles.cardTitle}>Income sources</h2>
-          <div className={styles.chartContainer}>
-            <Doughnut 
-              data={incomeChartData}
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                cutout: '72%',
-                plugins: {
-                  legend: {
-                    position: 'bottom',
-                    labels: {
-                      color: '#94a3b8',
-                      font: { size: 12 },
-                      padding: 16,
-                      boxWidth: 10,
-                      boxHeight: 10,
+          <div className={styles.card}>
+            <h2 className={styles.cardTitle}>Income sources</h2>
+            <div className={styles.chartContainer}>
+              <Doughnut
+                data={incomeChartData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  cutout: '72%',
+                  plugins: {
+                    legend: {
+                      position: 'bottom',
+                      labels: { color: '#94a3b8', font: { size: 12 }, padding: 16, boxWidth: 10, boxHeight: 10 },
                     },
+                    tooltip: tooltipDefaults,
                   },
-                  tooltip: {
-                    backgroundColor: '#0f172a',
-                    titleColor: '#94a3b8',
-                    bodyColor: '#ffffff',
-                    padding: 10,
-                    cornerRadius: 8,
-                  },
-                },
-              }}
-            />
+                }}
+              />
+            </div>
           </div>
         </div>
 
+        {/* Zone 3 — Trend (full width) */}
         <div className={styles.card}>
           <h2 className={styles.cardTitle}>Savings trend</h2>
-          <div className={styles.chartContainer}>
-            <Line 
+          <div className={styles.chartContainerTall}>
+            <Line
               data={{
                 ...savingsChartData,
-                datasets: [{
-                  ...savingsChartData.datasets[0],
-                  pointRadius: 4,
-                  pointHoverRadius: 6,
-                  borderWidth: 2,
-                }]
+                datasets: [{ ...savingsChartData.datasets[0], pointRadius: 4, pointHoverRadius: 6, borderWidth: 2 }],
               }}
               options={{
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                  legend: { display: false },
-                  tooltip: {
-                    backgroundColor: '#0f172a',
-                    titleColor: '#94a3b8',
-                    bodyColor: '#ffffff',
-                    padding: 10,
-                    cornerRadius: 8,
-                  },
-                },
-                scales: {
-                  x: {
-                    grid: { display: false },
-                    border: { display: false },
-                    ticks: { color: '#94a3b8', font: { size: 11 } },
-                  },
-                  y: {
-                    grid: { color: '#e8eaf0' },
-                    border: { display: false, dash: [4, 4] },
-                    ticks: { color: '#94a3b8', font: { size: 11 } },
-                  },
-                },
+                plugins: { legend: { display: false }, tooltip: tooltipDefaults },
+                scales: scaleDefaults,
               }}
             />
           </div>
         </div>
+
       </div>
     </div>
   );
