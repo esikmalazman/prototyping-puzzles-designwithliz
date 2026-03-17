@@ -10,6 +10,20 @@
 import { useState } from 'react';
 import styles from './vintage-mac.module.css';
 
+const AVATAR_PALETTE: { bg: string; fg: string }[] = [
+  { bg: '#e2c4c0', fg: '#7a3d39' }, // dusty rose
+  { bg: '#bdd0b9', fg: '#365633' }, // sage
+  { bg: '#ddd0b0', fg: '#5e4e28' }, // warm sand
+  { bg: '#b8c8dc', fg: '#334d6b' }, // slate blue
+  { bg: '#d0c4e0', fg: '#503968' }, // lavender
+  { bg: '#b4d0cc', fg: '#2a5450' }, // muted teal
+];
+
+function avatarColor(username: string) {
+  const code = username.toUpperCase().charCodeAt(0);
+  return AVATAR_PALETTE[code % AVATAR_PALETTE.length];
+}
+
 interface Post {
   id: number;
   username: string;
@@ -81,8 +95,15 @@ export default function HummingbirdFeed() {
           {posts.map(post => (
             <div key={post.id} className={styles.post}>
               <div className={styles.postHeader}>
-                <div className={styles.avatar}>
-                  {post.username[0]}
+                <div
+                  className={styles.avatar}
+                  style={{
+                    backgroundColor: avatarColor(post.username).bg,
+                    color: avatarColor(post.username).fg,
+                    borderColor: avatarColor(post.username).fg + '55',
+                  }}
+                >
+                  {post.username[0].toUpperCase()}
                 </div>
                 <div className={styles.postMeta}>
                   <span className={styles.username}>{post.username}</span>
