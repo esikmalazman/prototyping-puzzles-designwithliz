@@ -9,28 +9,33 @@ export default function Home() {
     description: string;
     href: string;
   }> = [
-    {
-      name: 'Finance dashboard',
-      description: 'A personal finance dashboard with expense tracking and visualizations',
-      href: '/prototypes/finance-dashboard',
-    },
-    {
-      name: 'Hummingbird',
-      description: 'A little social media Twitter clone',
-      href: '/prototypes/hummingbird',
-    },
-    {
-      name: 'Tasks',
-      description: 'A to do list app',
-      href: '/prototypes/tasks',
-    },  
-    // Add your new prototypes here like this:
-    // {
-    //   title: 'Your new prototype',
-    //   description: 'A short description of what this prototype does',
-    //   path: '/prototypes/my-new-prototype'
-    // },
-  ];
+      {
+        name: 'Finance dashboard',
+        description: 'A personal finance dashboard with expense tracking and visualizations',
+        href: '/prototypes/finance-dashboard',
+      },
+      {
+        name: 'Hummingbird',
+        description: 'A little social media Twitter clone',
+        href: '/prototypes/hummingbird',
+      },
+      {
+        name: 'Tasks',
+        description: 'A to do list app',
+        href: '/prototypes/tasks',
+      },
+      {
+        name: 'Inventory',
+        description: 'A items management app',
+        href: '/prototypes/inventory',
+      },
+      // Add your new prototypes here like this:
+      // {
+      //   title: 'Your new prototype',
+      //   description: 'A short description of what this prototype does',
+      //   path: '/prototypes/my-new-prototype'
+      // },
+    ];
 
   return (
     <main className={`${styles.container} ${instrumentSans.className}`}>
@@ -41,9 +46,9 @@ export default function Home() {
         <section className={styles.grid}>
           {/* Goes through the prototypes list (array) to create cards */}
           {prototypes.map((prototype, index) => (
-            <Link 
+            <Link
               key={index}
-              href={prototype.href} 
+              href={prototype.href}
               className={styles.card}
             >
               <h3>{prototype.name}</h3>

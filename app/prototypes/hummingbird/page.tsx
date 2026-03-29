@@ -71,48 +71,50 @@ export default function HummingbirdFeed() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.window}>
-        <div className={styles.titleBar}>
-          <h1 className={styles.titleText}>New post</h1>
+    <div className={styles.page}>
+      <div className={styles.container}>
+        <div className={styles.window}>
+          <div className={styles.titleBar}>
+            <h1 className={styles.titleText}>New post</h1>
+          </div>
+          <form onSubmit={handleSubmit} className={styles.postForm}>
+            <textarea
+              value={newPost}
+              onChange={(e) => setNewPost(e.target.value)}
+              placeholder="What's happening?"
+              className={styles.postInput}
+            />
+            <button type="submit" className={styles.postButton}>Post</button>
+          </form>
         </div>
-        <form onSubmit={handleSubmit} className={styles.postForm}>
-          <textarea
-            value={newPost}
-            onChange={(e) => setNewPost(e.target.value)}
-            placeholder="What's happening?"
-            className={styles.postInput}
-          />
-          <button type="submit" className={styles.postButton}>Post</button>
-        </form>
-      </div>
 
-      <div className={styles.window}>
-        <div className={styles.titleBar}>
-          <h2 className={styles.titleText}>Feed</h2>
-        </div>
-        <div className={styles.feed}>
-          {posts.map(post => (
-            <div key={post.id} className={styles.post}>
-              <div className={styles.postHeader}>
-                <div
-                  className={styles.avatar}
-                  style={{
-                    backgroundColor: avatarColor(post.username).bg,
-                    color: avatarColor(post.username).fg,
-                    borderColor: avatarColor(post.username).fg + '55',
-                  }}
-                >
-                  {post.username[0].toUpperCase()}
+        <div className={styles.window}>
+          <div className={styles.titleBar}>
+            <h2 className={styles.titleText}>Feed</h2>
+          </div>
+          <div className={styles.feed}>
+            {posts.map(post => (
+              <div key={post.id} className={styles.post}>
+                <div className={styles.postHeader}>
+                  <div
+                    className={styles.avatar}
+                    style={{
+                      backgroundColor: avatarColor(post.username).bg,
+                      color: avatarColor(post.username).fg,
+                      borderColor: avatarColor(post.username).fg + '55',
+                    }}
+                  >
+                    {post.username[0].toUpperCase()}
+                  </div>
+                  <div className={styles.postMeta}>
+                    <span className={styles.username}>{post.username}</span>
+                    <span className={styles.timestamp}>{post.timestamp}</span>
+                  </div>
                 </div>
-                <div className={styles.postMeta}>
-                  <span className={styles.username}>{post.username}</span>
-                  <span className={styles.timestamp}>{post.timestamp}</span>
-                </div>
+                <p className={styles.content}>{post.content}</p>
               </div>
-              <p className={styles.content}>{post.content}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>
